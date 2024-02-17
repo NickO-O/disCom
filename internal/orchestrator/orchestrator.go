@@ -18,11 +18,12 @@ var (
 )
 
 func CreateTask(expr expression.Expression) {
+
 	var mu sync.Mutex
 	mu.Lock()
 	err := Agent.AddTask(expr)
 	if err != nil {
-		Waiting = append(Waiting, expr)
+		AddtoWaiting(expr)
 	}
 
 	defer mu.Unlock()
@@ -52,7 +53,13 @@ func check() { // проверяет, свободны ли воркеры, чт
 	go func() {
 		for {
 			if len(Waiting) != 0 {
-				Agent.AddTask(GetFromWaiting())
+				//fmt.Println(Waiting)
+				expr := GetFromWaiting()
+				err := Agent.AddTask(expr)
+				//fmt.Println(err)
+				if err != nil {
+					AddtoWaiting(expr)
+				}
 			}
 		}
 	}()
@@ -71,14 +78,19 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetInfo() []string {
+	return Agent.GetAll()
+}
+
 func StartServer() {
+	Waiting = make([]expression.Expression, 0)
 	check()
 	go func() {
 		mux1 := http.NewServeMux()
 		mux1.HandleFunc("/", mainHandler)
-		fmt.Println("Orchestrator is running on http://localhost:8081")
 		http.ListenAndServe(":8081", mux1)
 	}()
 	Agent = *agent.NewAgent()
-	Waiting = make([]expression.Expression, 0)
+	fmt.Println("Orchestrator is running on http://localhost:8081")
+
 }

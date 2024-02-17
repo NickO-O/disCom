@@ -17,7 +17,7 @@ type Expression struct {
 
 func NewExpression(Name string) *Expression {
 
-	return &Expression{Name: Name, Status: 1, Id: int(uuid.New().ID())}
+	return &Expression{Name: Name, Status: 2, Id: int(uuid.New().ID())}
 }
 func (exp *Expression) ForTemplate() string {
 	var stat string
@@ -31,9 +31,9 @@ func (exp *Expression) ForTemplate() string {
 		stat = "Выражение невалидно"
 	}
 	if exp.Status == 0 {
-		return fmt.Sprintf("%s %s %.4f", exp.Name, stat, exp.Result)
+		return fmt.Sprintf("id: %d, %s %s %.4f", exp.Id, exp.Name, stat, exp.Result)
 	} else {
-		return fmt.Sprintf("%s %s", exp.Name, stat)
+		return fmt.Sprintf("id: %d, %s %s", exp.Id, exp.Name, stat)
 	}
 
 }

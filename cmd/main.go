@@ -121,17 +121,31 @@ func settingsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func computersHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		tmpl := template.Must(template.ParseFiles("frontend/computers.html"))
+
+		line := expTempl{}
+
+		arr := orchestrator.GetInfo()
+		line.Items = arr
+		tmpl.Execute(w, line)
+
+	}
+}
+
 func main() {
 
 	logger.Init()
+	database.DeleteAll()
 	orchestrator.StartServer()
 	env.Init()
 	filepath.Abs("/")
 	mux := http.NewServeMux()
-	logger.Log.Println("hi")
+	mux.HandleFunc("/computers", computersHandler)
 	mux.HandleFunc("/settings", settingsHandler)
-	mux.HandleFunc("/", calculateHandler)
 	mux.HandleFunc("/expressions", resultHandler)
+	mux.HandleFunc("/", calculateHandler)
 	defer logger.End()
 	fmt.Println("Server is running on http://localhost:8080	")
 	http.ListenAndServe(":8080", mux)

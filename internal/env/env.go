@@ -44,5 +44,5 @@ func Init() {
 
 func Save() {
 	f, _ := os.OpenFile(".env", os.O_WRONLY, 0600)
-	f.WriteString("Plus=" + strconv.Itoa(Plus) + "\n" + "Minus=" + strconv.Itoa(Minus) + "\n" + "Mul=" + strconv.Itoa(Mul) + "\n" + "Div=" + strconv.Itoa(Div) + "\n" + "Workers=" + strconv.Itoa(Mul))
+	f.WriteString("Plus=" + strconv.Itoa(Plus) + "\n" + "Minus=" + strconv.Itoa(Minus) + "\n" + "Mul=" + strconv.Itoa(Mul) + "\n" + "Div=" + strconv.Itoa(Div) + "\n" + "Workers=" + strconv.Itoa(Workers))
 }

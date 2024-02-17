@@ -12,6 +12,8 @@ import (
 var mu sync.Mutex
 
 func WriteExpression(exp expression.Expression) {
+	mu.Lock()
+	defer mu.Unlock()
 	db, err := sql.Open("sqlite3", "internal/database/data.sql")
 	if err != nil {
 		logger.Log.Error("Cannot open file data.sql file: database.go func:WriteExpression")
@@ -21,6 +23,8 @@ func WriteExpression(exp expression.Expression) {
 }
 
 func ReadExpression(id int) *expression.Expression {
+	mu.Lock()
+	defer mu.Unlock()
 	db, err := sql.Open("sqlite3", "internal/database/data.sql")
 	if err != nil {
 		logger.Log.Error("Cannot open file data.sql file: database.go func:ReadExpression")
@@ -49,6 +53,8 @@ func DeleteAll() {
 }
 
 func UpdateExpr(expr expression.Expression) {
+	mu.Lock()
+	defer mu.Unlock()
 	db, _ := sql.Open("sqlite3", "internal/database/data.sql")
 	if expr.Status == 0 {
 		db.Exec("update Expressions set status = $1 where id = $2", expr.Status, expr.Id)
