@@ -191,7 +191,7 @@ func PerformOperation(operator string, operand1, operand2 float64) float64 {
 		time.Sleep(time.Duration(constants.Div) * time.Second)
 		return operand1 / operand2
 	default:
-		panic(errors.New("Not an operator"))
+		panic(errors.New("not an operator"))
 	}
 }
 
