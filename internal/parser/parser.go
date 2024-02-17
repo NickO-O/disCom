@@ -133,7 +133,7 @@ func EvaluatePostOrder(node *Node, subExpressions *map[int]string, counter *int)
 		lastIndex := *counter - 1
 		secondLastIndex := lastIndex - 1
 		subExpression := fmt.Sprintf("%s %s %s", (*subExpressions)[secondLastIndex], node.Operator, (*subExpressions)[lastIndex])
-		// сохраняем в мапу наше субвыражение 
+		// сохраняем в мапу наше субвыражение
 		(*subExpressions)[*counter] = subExpression
 		*counter++
 	}
