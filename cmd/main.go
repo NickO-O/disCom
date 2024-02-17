@@ -35,7 +35,7 @@ func calculateHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		f, err := os.Open("frontend/main.html")
 		if err != nil {
-			logger.Log.Println("cannor open file main.html file: main.go line: 33")
+			logger.Log.Println("cannor open file main.html file: main.go func: calculateHandler")
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		body, err := io.ReadAll(f)
@@ -46,7 +46,7 @@ func calculateHandler(w http.ResponseWriter, r *http.Request) {
 		expr := expression.NewExpression(string(body))
 
 		database.WriteExpression(*expr)
-		node, err := parser.ExpressionParser(expr.Name)
+		node, err := parser.ParseExpr(expr.Name)
 		if err != nil {
 			expr.Status = 3
 			database.UpdateExpr(*expr)
@@ -54,10 +54,9 @@ func calculateHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		expr.Node = *node
 		b, _ := json.Marshal(expr)
-		r := bytes.NewReader(b)
-		http.Post("http://localhost:8081", "application/json", r)
-		//req, err := http.NewRequest("POST", url, strings.NewReader(form.Encode()))
-
+		rb := bytes.NewReader(b)
+		http.Post("http://localhost:8081", "application/json", rb)
+		//req, err := http.NewRequest("POST", url, strings.NewReader(form.Encode()))\
 	}
 }
 
