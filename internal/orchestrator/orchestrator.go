@@ -70,7 +70,8 @@ func check() { // проверяет, свободны ли воркеры, чт
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		http.Redirect(w, r, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", http.StatusSeeOther)
+		fmt.Fprintln(w, "Работает успешно\nДлина Waiting:", len(Waiting))
+		// http.Redirect(w, r, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", http.StatusSeeOther) ахахаха, очень хотелось
 	} else if r.Method == http.MethodPost {
 		data, _ := io.ReadAll(r.Body)
 
