@@ -9,10 +9,6 @@ import (
 	"net/http"
 )
 
-type Pair struct {
-	first  chan float64 // cюда возращаем
-	second expression.Expression
-}
 
 func StartWorker(exprchan chan expression.Expression) {
 	go func() {

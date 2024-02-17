@@ -37,6 +37,3 @@ func (exp *Expression) ForTemplate() string {
 	}
 
 }
-
-type ExprJson struct {
-}

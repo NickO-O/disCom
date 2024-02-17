@@ -27,7 +27,7 @@ func tokenize(str string) []string {
 }
 
 // ExpressionParser парсер нашего выражения
-func ExpressionParser(s string) (*Node, error) {
+func ParseExpr(s string) (*Node, error) {
 	var (
 		tokens    = tokenize(s)
 		stack     []*Node
@@ -91,7 +91,7 @@ func popOperator(stack *[]*Node, operators *[]string) error {
 	right := (*stack)[len(*stack)-1]
 	*stack = (*stack)[:len(*stack)-1]
 	if len(*stack) == 0 {
-		return errors.New("ss")
+		return errors.New("ф")
 	}
 	left := (*stack)[len(*stack)-1]
 	*stack = (*stack)[:len(*stack)-1]
@@ -133,7 +133,7 @@ func EvaluatePostOrder(node *Node, subExpressions *map[int]string, counter *int)
 		lastIndex := *counter - 1
 		secondLastIndex := lastIndex - 1
 		subExpression := fmt.Sprintf("%s %s %s", (*subExpressions)[secondLastIndex], node.Operator, (*subExpressions)[lastIndex])
-		// сохраняем в мапу наше субвыражение :)
+		// сохраняем в мапу наше субвыражение 
 		(*subExpressions)[*counter] = subExpression
 		*counter++
 	}
@@ -141,7 +141,7 @@ func EvaluatePostOrder(node *Node, subExpressions *map[int]string, counter *int)
 }
 
 func ValidatedPostOrder(s string) (map[int]string, error) {
-	node, err := ExpressionParser(s)
+	node, err := ParseExpr(s)
 	if err != nil {
 		return nil, err
 	}
