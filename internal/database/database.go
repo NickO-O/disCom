@@ -11,7 +11,7 @@ import (
 
 var mu sync.Mutex
 
-func WriteExpression(exp expression.Expression) {
+func WriteExpression(exp expression.Expression) { // запысывает выражение в бд
 	mu.Lock()
 	defer mu.Unlock()
 	db, err := sql.Open("sqlite3", "internal/database/data.sql")
@@ -22,7 +22,7 @@ func WriteExpression(exp expression.Expression) {
 
 }
 
-func ReadExpression(id int) *expression.Expression {
+func ReadExpression(id int) *expression.Expression { // считывает инфу о выражении с бд
 	mu.Lock()
 	defer mu.Unlock()
 	db, err := sql.Open("sqlite3", "internal/database/data.sql")
@@ -39,7 +39,7 @@ func ReadExpression(id int) *expression.Expression {
 	return exp
 }
 
-func C() {
+func c() {
 	db, _ := sql.Open("sqlite3", "internal/database/data.sql")
 	db.Exec("CREATE TABLE Expressions(Id INTEGER PRIMARY KEY , Name TEXT, Status INTEGER, Result FLOAT);")
 
@@ -52,7 +52,7 @@ func DeleteAll() {
 	defer db.Close()
 }
 
-func UpdateExpr(expr expression.Expression) {
+func UpdateExpr(expr expression.Expression) { // обновляет инфу о выражении в базе данных
 	mu.Lock()
 	defer mu.Unlock()
 	db, _ := sql.Open("sqlite3", "internal/database/data.sql")
@@ -67,7 +67,7 @@ func UpdateExpr(expr expression.Expression) {
 
 }
 
-func GetAll() ([]*expression.Expression, error) {
+func GetAll() ([]*expression.Expression, error) { // даёт все выражениея
 	all := make([]*expression.Expression, 0)
 	db, err := sql.Open("sqlite3", "internal/database/data.sql")
 	if err != nil {

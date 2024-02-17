@@ -7,19 +7,20 @@ import (
 	"github.com/google/uuid"
 )
 
+// Инкапсулирует выражение
 type Expression struct {
 	Name   string // Изначальное значение выражения
 	Status int    // Статус выражения: 0 если посчиталось, 1 если считается, 2 если ждёт вычисления, 3 если выражение невалидно
 	Id     int
-	Result float64 // результат выражения, если посчиталось
-	Node   parser.Node
+	Result float64     // результат выражения, если посчиталось
+	Node   parser.Node // дерево для расчета результата
 }
 
 func NewExpression(Name string) *Expression {
 
 	return &Expression{Name: Name, Status: 2, Id: int(uuid.New().ID())}
 }
-func (exp *Expression) ForTemplate() string {
+func (exp *Expression) ForTemplate() string { // Возвращает информацию для страницы /expressions
 	var stat string
 	if exp.Status == 0 {
 		stat = "Выражение посчиталось, результат:"

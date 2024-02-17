@@ -14,11 +14,11 @@ import (
 )
 
 var (
-	Waiting []expression.Expression
+	Waiting []expression.Expression //Здесь лежат выражения, которым не хватило воркеров
 	Agent   agent.Agent
 )
 
-func CreateTask(expr expression.Expression) {
+func CreateTask(expr expression.Expression) { // Создаёт задание
 
 	var mu sync.Mutex
 	mu.Lock()
@@ -30,6 +30,8 @@ func CreateTask(expr expression.Expression) {
 	defer mu.Unlock()
 
 }
+
+//Далее синхронизированные методы для добавление/удаления из слайса
 
 func AddtoWaiting(expr expression.Expression) {
 	var mu sync.Mutex
@@ -66,21 +68,6 @@ func check() { // проверяет, свободны ли воркеры, чт
 	}()
 }
 
-func check1() {
-	var mu sync.Mutex
-	mu.Lock()
-	defer mu.Unlock()
-	if len(Waiting) != 0 {
-		//fmt.Println(Waiting)
-		expr := GetFromWaiting()
-		err := Agent.AddTask(expr)
-		//fmt.Println(err)
-		if err != nil {
-			AddtoWaiting(expr)
-		}
-	}
-}
-
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		http.Redirect(w, r, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", http.StatusSeeOther)
@@ -98,7 +85,7 @@ func GetInfo() []string {
 	return Agent.GetAll()
 }
 
-func StartServer() {
+func StartServer() { //запускает горутину с оркестратором
 	Waiting = make([]expression.Expression, 0)
 	check()
 	go func() {

@@ -15,7 +15,7 @@ var Mul int = 0
 var Div int = 0
 var Workers = 3
 
-func Init() {
+func Init() { // Вызывается в начале, считывает переменные среды
 	f, _ := os.Open(".env")
 
 	stdinScanner := bufio.NewScanner(f)
@@ -42,7 +42,7 @@ func Init() {
 	}
 }
 
-func Save() {
+func Save() { // сохраняет переменные среды
 	f, _ := os.OpenFile(".env", os.O_WRONLY, 0600)
 	f.WriteString("Plus=" + strconv.Itoa(Plus) + "\n" + "Minus=" + strconv.Itoa(Minus) + "\n" + "Mul=" + strconv.Itoa(Mul) + "\n" + "Div=" + strconv.Itoa(Div) + "\n" + "Workers=" + strconv.Itoa(Workers))
 }

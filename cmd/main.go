@@ -81,13 +81,19 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 
 func settingsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		f, err := os.Open("frontend/settings.html")
-		if err != nil {
-			logger.Log.Println("cannor open file main.html file: main.go func: settingsHandler")
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		tmpl := template.Must(template.ParseFiles("frontend/settings.html"))
+		f := struct {
+			Plus  int
+			Minus int
+			Mul   int
+			Div   int
+		}{
+			Plus:  env.Plus,
+			Minus: env.Minus,
+			Mul:   env.Mul,
+			Div:   env.Div,
 		}
-		body, err := io.ReadAll(f)
-		fmt.Fprintf(w, string(body))
+		tmpl.Execute(w, f)
 	} else if r.Method == http.MethodPost {
 		var set jsonSet
 		var plus, minus, mul, div int

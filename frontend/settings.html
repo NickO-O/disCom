@@ -53,10 +53,11 @@
         <a class="navbar-brand" href="/settings">Настройки</a>
     </nav>
 <div class="container">
-    <input id="t1" type="text" placeholder="Ввод длительности выполнения +" />
-    <input id="t2" type="text" placeholder="Ввод длительности выполнения -" />
-    <input id="t3" type="text" placeholder="Ввод длительности выполнения *" />
-    <input id="t4" type="text" placeholder="Ввод длительности выполнения /" />
+    <input id="t1" type="text" placeholder="Длительность +, сейчас {{.Plus}} сек" />
+    
+    <input id="t2" type="text" placeholder="Длительность - сейчас {{.Minus}} сек " />
+    <input id="t3" type="text" placeholder="Длительность * сейчас {{.Mul}} сек" />
+    <input id="t4" type="text" placeholder="Длительность / сейчас {{.Div}} сек" />
     <button onclick="calculateExpression()">Отправить</button>
 </div>
 <script>

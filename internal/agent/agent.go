@@ -16,7 +16,7 @@ type Agent struct {
 	Work   []expression.Expression
 }
 
-func (ag *Agent) GetAll() []string {
+func (ag *Agent) GetAll() []string { // Инфа для страницы /computers
 	all := make([]string, 0)
 	for ind, i := range ag.IsFree {
 		if i {
@@ -43,7 +43,7 @@ func NewAgent() *Agent {
 	return &Agent{Tasks: tasks, IsFree: IsFree, Work: Work}
 }
 
-func (ag *Agent) AddTask(expr expression.Expression) error {
+func (ag *Agent) AddTask(expr expression.Expression) error { // Создание задания
 	for ind, i := range ag.IsFree {
 		if i {
 			ag.Tasks[ind] <- expr
