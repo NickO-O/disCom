@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"sync"
+	"time"
 )
 
 var (
@@ -53,7 +54,7 @@ func check() { // проверяет, свободны ли воркеры, чт
 	go func() {
 		for {
 			if len(Waiting) != 0 {
-				//fmt.Println(Waiting)
+				time.Sleep(100 * time.Millisecond) // Я хз, без этого не работает
 				expr := GetFromWaiting()
 				err := Agent.AddTask(expr)
 				//fmt.Println(err)
@@ -63,6 +64,21 @@ func check() { // проверяет, свободны ли воркеры, чт
 			}
 		}
 	}()
+}
+
+func check1() {
+	var mu sync.Mutex
+	mu.Lock()
+	defer mu.Unlock()
+	if len(Waiting) != 0 {
+		//fmt.Println(Waiting)
+		expr := GetFromWaiting()
+		err := Agent.AddTask(expr)
+		//fmt.Println(err)
+		if err != nil {
+			AddtoWaiting(expr)
+		}
+	}
 }
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
