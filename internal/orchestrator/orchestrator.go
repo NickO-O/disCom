@@ -4,7 +4,9 @@ package orchestrator
 
 import (
 	"disCom/internal/agent"
+	"disCom/internal/database"
 	"disCom/internal/expression"
+	"disCom/internal/logger"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -86,7 +88,18 @@ func GetInfo() []string {
 	return Agent.GetAll()
 }
 
-func StartServer() { //запускает горутину с оркестратором
+func StartServer() { //запускает горутину с оркестратором и загружает те выражения, которые не были
+	exprs, err := database.GetAll()
+	if err != nil {
+		logger.Log.Error(err.Error())
+	}
+	for _, ex := range exprs {
+		if ex.Status == 1 || ex.Status == 2 {
+			AddtoWaiting(*ex)
+		}
+
+	}
+
 	Waiting = make([]expression.Expression, 0)
 	check()
 	go func() {
@@ -97,4 +110,10 @@ func StartServer() { //запускает горутину с оркестрат
 	Agent = *agent.NewAgent()
 	fmt.Println("Orchestrator is running on http://localhost:8081")
 
+}
+
+func End() { // вызывается при завершении работы
+	for _, expr := range Waiting {
+		database.WriteExpression(expr)
+	}
 }

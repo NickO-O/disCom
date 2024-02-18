@@ -139,6 +139,13 @@ func computersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func exitHandler(w http.ResponseWriter, r *http.Request) {
+	logger.End()
+	orchestrator.End()
+	fmt.Println("Вы вышли из приложения")
+	os.Exit(0)
+}
+
 func main() {
 
 	logger.Init()
@@ -150,8 +157,10 @@ func main() {
 	mux.HandleFunc("/computers", computersHandler)
 	mux.HandleFunc("/settings", settingsHandler)
 	mux.HandleFunc("/expressions", resultHandler)
+	mux.HandleFunc("/exit", exitHandler)
 	mux.HandleFunc("/", calculateHandler)
 	defer logger.End()
 	fmt.Println("Server is running on http://localhost:8080	")
 	http.ListenAndServe(":8080", mux)
+
 }
