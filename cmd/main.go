@@ -149,7 +149,6 @@ func exitHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	logger.Init()
-	database.DeleteAll()
 	orchestrator.StartServer()
 	env.Init()
 	filepath.Abs("/")
