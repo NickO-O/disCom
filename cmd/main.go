@@ -39,7 +39,11 @@ func calculateHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		body, err := io.ReadAll(f)
-		fmt.Fprintf(w, string(body))
+		if err != nil {
+			logger.Log.Error("something went worong in calculateHandler")
+		} else {
+			fmt.Fprint(w, string(body))
+		}
 	}
 	if r.Method == http.MethodPost {
 		body, _ := io.ReadAll(r.Body)
@@ -56,6 +60,7 @@ func calculateHandler(w http.ResponseWriter, r *http.Request) {
 		b, _ := json.Marshal(expr)
 		rb := bytes.NewReader(b)
 		http.Post("http://localhost:8081", "application/json", rb)
+		logger.Log.Println("Выражение отправлено id:", expr)
 		//req, err := http.NewRequest("POST", url, strings.NewReader(form.Encode()))\
 	}
 }
