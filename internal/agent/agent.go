@@ -4,6 +4,7 @@ import (
 	"disCom/internal/database"
 	"disCom/internal/env"
 	"disCom/internal/expression"
+	"disCom/internal/logger"
 	"disCom/internal/worker"
 	"errors"
 	"fmt"
@@ -46,6 +47,7 @@ func NewAgent() *Agent {
 func (ag *Agent) AddTask(expr expression.Expression) error { // Создание задания
 	for ind, i := range ag.IsFree {
 		if i {
+			logger.Log.Println("Выражение принято на обработку, id:", expr.Id)
 			ag.Tasks[ind] <- expr
 			ag.Work[ind] = expr
 			expr.Status = 1
