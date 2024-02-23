@@ -44,11 +44,6 @@
                 },
                 body: expression
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Выводим результат вычислений в консоль
-                // Дополнительные действия с результатом (например, вывод на страницу)
-            })
             .catch(error => console.error('Error:', error));
         }
     </script>
