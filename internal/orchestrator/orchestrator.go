@@ -1,6 +1,6 @@
 package orchestrator
 
-//Здесь лежит и агент и оркестратор
+//Здесь лежит оркестратор
 
 import (
 	"disCom/internal/agent"
@@ -26,6 +26,7 @@ func CreateTask(expr expression.Expression) { // Создаёт задание
 	mu.Lock()
 	err := Agent.AddTask(expr)
 	if err != nil {
+
 		AddtoWaiting(expr)
 	}
 
@@ -105,7 +106,11 @@ func StartServer() { //запускает горутину с оркестрат
 	go func() {
 		mux1 := http.NewServeMux()
 		mux1.HandleFunc("/", mainHandler)
-		http.ListenAndServe(":8081", mux1)
+		err := http.ListenAndServe(":8081", mux1)
+		if err != nil {
+			logger.Log.Panic("Порт 8081 занят!")
+			fmt.Println("Порт 8081 занят!")
+		}
 	}()
 	Agent = *agent.NewAgent()
 	fmt.Println("Orchestrator is running on http://localhost:8081")
